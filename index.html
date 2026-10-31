@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+
+<title>Gaurav | Professional Portfolio</title>
+
+<style>
+/* --- Premium Variables --- */
+:root {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --surface-hover: #171717;
+  --border: #27272a;
+  --text: #ffffff;
+  --muted: #a1a1aa;
+  --accent: #ffffff;
+  --nav-bg: rgba(10, 10, 10, 0.6);
+  --easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.light {
+  --bg: #fdfdfd;
+  --surface: #ffffff;
+  --surface-hover: #f4f4f5;
+  --border: #e4e4e7;
+  --text: #09090b;
+  --muted: #71717a;
+  --accent: #000000;
+  --nav-bg: rgba(255, 255, 255, 0.6);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.5s ease, color 0.5s ease;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Spotlight Background */
+.spotlight {
+  position: fixed;
+  top: -20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 50vh;
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+body.light .spotlight {
+  background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, rgba(253,253,253,0) 70%);
+}
+
+a { text-decoration: none; color: inherit; }
+button, input, textarea { font: inherit; outline: none; border: none; }
+
+/* --- Glassmorphism Navigation --- */
+header {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700px;
+  z-index: 100;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s var(--easing);
+}
+
+body.light nav { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04); }
+
+.logo {
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.5px;
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 8px 18px;
+  border-radius: 100px;
+  transition: all 0.3s var(--easing);
+}
+
+.nav-links a:hover {
+  color: var(--text);
+}
+
+.nav-links a.active {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+}
+
+.icon-btn {
+  background: transparent;
+  color: var(--muted);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--easing);
+}
+.icon-btn:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+.menu-btn { display: none; }
+
+/* --- Tactile Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.4s var(--easing);
+  cursor: pointer;
+  letter-spacing: -0.2px;
+}
+
+.btn:active {
+  transform: scale(0.96); /* Provides the "sound in touch" / physical press feel */
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  border: 1px solid var(--accent);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+}
+body.light .btn-primary:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  background: var(--surface-hover);
+  border-color: var(--muted);
+}
+
+/* --- SPA Architecture & Smooth Animations --- */
+main {
+  flex: 1;
+  padding-top: 140px;
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.screen {
+  display: none;
+  min-height: calc(100vh - 140px);
+  padding: 20px 8% 80px 8%;
+}
+
+.screen.active {
+  display: block;
+  animation: smoothReveal 0.8s var(--easing) forwards;
+}
+
+@keyframes smoothReveal {
+  0% { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(4px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* --- Typography --- */
+h1 {
+  font-size: clamp(42px, 7vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.subtitle {
+  font-size: clamp(16px, 2.5vw, 19px);
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 540px;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.section-header { margin-bottom: 60px; }
+.section-header h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+.section-header p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* Typewriter Cursor */
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.8em;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-left: 4px;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* --- Minimalist Grids & Cards --- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+.p-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  transition: all 0.5s var(--easing);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.p-card:hover {
+  transform: translateY(-4px);
+  background: var(--surface-hover);
+  border-color: var(--muted);
+}
+
+.p-card i {
+  font-size: 24px;
+  margin-bottom: 24px;
+  font-style: normal;
+}
+
+.p-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.p-card p {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.card-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.3s ease;
+}
+.p-card:hover .card-link { gap: 10px; }
+
+/* --- Contact Form (Clean Layout) --- */
+.form-container {
+  background: transparent;
+}
+
+.form-group {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+input, textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 15px;
+  transition: all 0.3s var(--easing);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--text);
+  background: var(--bg);
+}
+
+textarea { min-height: 140px; resize: vertical; }
+
+/* --- Footer --- */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  nav { border-radius: 16px; padding: 12px 16px; }
+  .menu-btn { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 20px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  h1 { font-size: 40px; }
+}
+</style>
+</head>
+<body>
+
+<div class="spotlight"></div>
+
+<header>
+  <nav>
+    <a href="#home" class="logo">heygaurav.in</a>
+    
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Overview</a>
+      <a href="#about">Profile</a>
+      <a href="#work">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="controls">
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle Theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      </button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+  
+  <!-- SCREEN 1: OVERVIEW -->
+  <section class="screen active" id="home">
+    <div style="padding-top: 40px;">
+      <h1>Digital <br><span id="typewriter" style="color: var(--muted);"></span><span class="cursor"></span></h1>
+      <p class="subtitle">I design and develop minimalist, high-performance web experiences. Focused on clean code, seamless interactions, and functional aesthetics.</p>
+      
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;">
+        <a href="#work" class="btn btn-primary">View Portfolio</a>
+        <a href="#contact" class="btn btn-secondary">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: PROFILE -->
+  <section class="screen" id="about">
+    <div class="grid-2">
+      <div>
+        <div class="section-header">
+          <h2>Professional Profile</h2>
+          <p>Dedicated to creating digital solutions that prioritize user experience and architectural simplicity.</p>
+        </div>
+        <p style="color: var(--muted); line-height: 1.7; margin-bottom: 24px; font-size: 15px;">
+          I am a developer who believes in the philosophy of "less, but better." By stripping away unnecessary complexity, I build robust, scalable platforms that perform flawlessly across all devices.
+        </p>
+        <p style="color: var(--muted); line-height: 1.7; font-size: 15px;">
+          My expertise spans across modern front-end frameworks, responsive UI/UX principles, and secure back-end integrations, allowing me to handle projects from concept to deployment.
+        </p>
+      </div>
+      
+      <div>
+        <div class="p-card" style="padding: 30px;">
+          <h3 style="margin-bottom: 20px; font-size: 14px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Core Competencies</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px; font-size: 15px;">
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+              <span>Frontend Architecture</span>
+              <span style="color: var(--muted);">React, JS, HTML/CSS</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+              <span>Interface Design</span>
+              <span style="color: var(--muted);">Figma, UI/UX</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+              <span>System Operations</span>
+              <span style="color: var(--muted);">Git, Deployment</span>
+            </li>
+            <li style="display: flex; justify-content: space-between;">
+              <span>Business Logic</span>
+              <span style="color: var(--muted);">APIs, Node.js</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: PROJECTS -->
+  <section class="screen" id="work">
+    <div class="section-header">
+      <h2>Selected Projects</h2>
+      <p>A curated collection of my recent work focusing on clean interfaces and efficient code.</p>
+    </div>
+
+    <div class="grid-3">
+      <article class="p-card">
+        <i>⌘</i>
+        <h3>Enterprise Dashboard</h3>
+        <p>A comprehensive data visualization tool built for speed. Features real-time analytics, modular components, and dark-mode native design.</p>
+        <div class="card-link">View Case Study &rarr;</div>
+      </article>
+
+      <article class="p-card">
+        <i>◒</i>
+        <h3>E-Commerce Architecture</h3>
+        <p>A headless commerce frontend optimized for conversion. Integrated with secure payment gateways and dynamic product routing.</p>
+        <div class="card-link">View Case Study &rarr;</div>
+      </article>
+
+      <article class="p-card">
+        <i>✦</i>
+        <h3>Brand Identity Web</h3>
+        <p>A minimalist portfolio platform utilizing Single Page Application mechanics and advanced CSS transitions for a seamless feel.</p>
+        <div class="card-link">View Case Study &rarr;</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: CONTACT -->
+  <section class="screen" id="contact">
+    <div class="grid-2">
+      <div>
+        <div class="section-header">
+          <h2>Initiate Contact</h2>
+          <p>Available for freelance opportunities, technical consulting, and collaborative projects.</p>
+        </div>
+        
+        <div style="margin-top: 40px; font-size: 15px;">
+          <div style="margin-bottom: 24px;">
+            <p style="color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Email</p>
+            <p>hello@heygaurav.in</p>
+          </div>
+          <div>
+            <p style="color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Location</p>
+            <p>Remote / India</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <form action="https://formsubmit.co/djtownowner@gmail.com" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required placeholder="Jane Doe">
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="jane@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required placeholder="How can we collaborate?"></textarea>
+          </div>
+          
+          <input type="hidden" name="_subject" value="New Inquiry from Portfolio">
+          <input type="hidden" name="_captcha" value="false">
+          
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Inquiry</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Gaurav. All rights reserved.</p>
+</footer>
+
+<script>
+// --- SPA Routing & Smooth Transitions ---
+const screens = document.querySelectorAll('.screen');
+const navLinks = document.querySelectorAll('.nav-links a');
+const navContainer = document.getElementById('navLinks');
+
+function switchScreen() {
+  let hash = window.location.hash.substring(1);
+  if (!hash || !document.getElementById(hash)) hash = 'home';
+
+  // Smooth out phase
+  screens.forEach(screen => {
+    screen.classList.remove('active');
+  });
+  
+  navLinks.forEach(link => link.classList.remove('active'));
+
+  // Trigger repaint to restart animation
+  void document.getElementById(hash).offsetWidth;
+  
+  // Smooth in phase
+  document.getElementById(hash).classList.add('active');
+  
+  document.querySelectorAll(`.nav-links a[href="#${hash}"]`).forEach(link => {
+    link.classList.add('active');
+  });
+
+  navContainer.classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('hashchange', switchScreen);
+window.addEventListener('load', switchScreen);
+
+// --- Mobile Menu ---
+document.getElementById('menuBtn').onclick = () => {
+  navContainer.classList.toggle('open');
+};
+
+// --- Theme Toggle ---
+const themeBtn = document.getElementById('themeBtn');
+themeBtn.onclick = () => {
+  document.body.classList.toggle('light');
+};
+
+// --- Typewriter Effect ---
+const words = ["Craftsmanship.", "Architecture.", "Experiences."];
+let wordIdx = 0, charIdx = 0, isDeleting = false;
+const typeEl = document.getElementById("typewriter");
+
+function type() {
+  if (!typeEl) return;
+  const current = words[wordIdx];
+  
+  if (isDeleting) {
+    charIdx--;
+  } else {
+    charIdx++;
+  }
+
+  typeEl.textContent = current.substring(0, charIdx);
+
+  let speed = isDeleting ? 40 : 120;
+
+  if (!isDeleting && charIdx === current.length) {
+    speed = 2500; // Pause at end of word
+    isDeleting = true;
+  } else if (isDeleting && charIdx === 0) {
+    isDeleting = false;
+    wordIdx = (wordIdx + 1) % words.length;
+    speed = 500; // Pause before typing next word
+  }
+  
+  setTimeout(type, speed);
+}
+setTimeout(type, 800);
+
+// --- Date ---
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
